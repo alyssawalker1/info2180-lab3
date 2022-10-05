@@ -12,6 +12,19 @@ function loadpage()
     {
         start.children[i].classList.add("square")       
         start.children[i].addEventListener('click', clicker)
+        start.children[i].addEventListener('mouseover', highlight)
+        start.children[i].addEventListener('mouseout', highlight)
+    }
+}
+function highlight(event)
+{
+    pos = Array.from(start.children).indexOf(event.target)
+    if (event.type == "mouseover")
+    {
+        start.children[pos].classList.add("hover")
+    }else if (event.type == "mouseout")
+    {
+        start.children[pos].classList.remove("hover")
     }
 }
 
