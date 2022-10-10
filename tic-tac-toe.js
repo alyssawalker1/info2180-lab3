@@ -1,5 +1,8 @@
 window.onload = loadpage;
 
+firstmove = false
+winbool = false
+
 function loadpage()
 {   move1 = 0;
     start = document.getElementById("board")
@@ -12,6 +15,8 @@ function loadpage()
         start.children[i].addEventListener('mouseover', highlight)
         start.children[i].addEventListener('mouseout', highlight)
     }
+    
+    document.getElementsByClassName("btn")[0].addEventListener('click', newgame)
 }
 function highlight(event)
 {
@@ -27,25 +32,32 @@ function highlight(event)
 
 function clicker(event)
 {
+    if(!winbool){
+        pos = Array.from(start.children).indexOf(event.target)
 
 
-    pos = Array.from(start.children).indexOf(event.target)
-    if (move1 == 0)
-    {   
-        start.children[pos].classList.add("O")
-        start.children[pos].innerHTML= "O"
-        move1 = 1
-        tictactoe.stateofo[pos] = true
-    } else
-    { 
-        start.children[pos].classList.add("X")
-        start.children[pos].innerHTML= "X"
-        move1 = 0
-        tictactoe.stateofx[pos] = true
+
+        if (move1 == 0)
+        {   
+            if(start.children[pos].innerHTML != "X"){
+                start.children[pos].classList.add("O")
+                start.children[pos].innerHTML= "O"
+                move1 = 1
+                tictactoe.stateofo[pos] = true
+            }
+        } else
+        { 
+            if(start.children[pos].innerHTML != "O"){
+
+                start.children[pos].classList.add("X")
+                start.children[pos].innerHTML= "X"
+                move1 = 0
+                tictactoe.stateofx[pos] = true
+            }
+        }
+        firstmove = true
+        winner()
     }
-
-    winner()
-
 }
 
 const tictactoe = {
@@ -73,8 +85,6 @@ const tictactoe = {
 
 function winner()
 {   
-    winbool = false
-
     x_winco = 0
     o_winco = 0  
 
@@ -87,16 +97,28 @@ function winner()
                 if(x_winco == 3){
                     document.getElementById("status").innerHTML = "Congratulations! X is the Winner!"
                     document.getElementById("status").classList.add("you-won")
+                    winbool = true
                 }
             }else if(tictactoe.stateofo[tictactoe.win_states[count][innercount]] == true){
                 o_winco ++
                 if(o_winco == 3){
                     document.getElementById("status").innerHTML = "Congratulations! O is the Winner!"
                     document.getElementById("status").classList.add("you-won")
+                    winbool = true
                 }
             }
         }
         x_winco = 0
         o_winco = 0
+    }
+}
+
+function newgame(event)
+{
+    if (firstmove){
+        if(event)
+        {
+            location.reload()           
+        }
     }
 }
